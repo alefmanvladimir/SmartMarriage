@@ -1,4 +1,6 @@
-pragma solidity ^0.8.0;
+// SPDX-License-Identifier: UNLICENSED
+
+pragma solidity ^0.8.17;
 
 //import "./interface/ISafe.sol";
 import "./office/Office.sol";
@@ -20,6 +22,8 @@ contract Marriage {
         _;
     }
 
+    event SafeDeployed(address safe);
+
     constructor(Office _office, address [] memory _familyAddresses) {
         office = _office;
         for(uint i; i<_familyAddresses.length; i++){
@@ -29,7 +33,6 @@ contract Marriage {
 
     function deploySafe(address[] memory owners, uint256 threshold)
     public
-    requirePermission(KERNEL_ADMIN)
     returns (address)
     {
         bytes memory emptyBytes;

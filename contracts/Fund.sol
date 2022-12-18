@@ -1,4 +1,6 @@
-pragma solidity ^0.8.0;
+// SPDX-License-Identifier: UNLICENSED
+
+pragma solidity ^0.8.17;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "./TokenFund.sol";
@@ -18,8 +20,8 @@ contract Fund {
         }
         require(totalShare==10**token.decimals() * 100, "incorrect shares");
         owners = _owners;
-        token = new TokenFund(name, symbol);
-        for(uint i; _owners.length; i++){
+        token = new TokenFund(name, symbol, address(this));
+        for(uint i; i<_owners.length; i++){
             token.mint(_owners[i], _shares[i]);
         }
     }
@@ -34,7 +36,7 @@ contract Fund {
     function _withdrawNativeToken() internal{
         for(uint i; i<owners.length; i++){
             uint amount = address(this).balance * (10 ** token.decimals()) / token.balanceOf(owners[i]);
-            address(owners[i]).transfer(amount);
+            payable(owners[i]).transfer(amount);
         }
     }
 
